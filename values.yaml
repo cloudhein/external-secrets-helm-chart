@@ -46,3 +46,23 @@ externalSecrets:
     keys:
       addr: addr
       password: password
+
+  - name: aws-external-secret-amqp
+    secretStoreRef: secretstore-aws
+    targetSecretName: amqp-secret
+    refreshInterval: 600s
+    remoteKey: amqp-credentials
+    keys:
+      username: username
+      password: password
+      host: host
+      port: port
+
+  - name: aws-external-secret-pubsub
+    secretStoreRef: secretstore-aws
+    targetSecretName: pubsub-secret
+    refreshInterval: 600s
+    remoteKey: kafka-credentials
+    keys:
+      host: host
+      port: port
