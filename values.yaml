@@ -1,0 +1,48 @@
+# ── AWS SecretStore ───────────────────────────────────────────────────────────
+secretStore:
+  name: secretstore-aws
+  refreshInterval: 600
+  region: ap-southeast-1
+  # K8s secret containing AWS credentials (for non-IRSA, local dev only)
+  awsCredsSecretName: aws-creds
+
+# ── External Secrets ─────────────────────────────────────────────────────────
+# Each entry creates one ExternalSecret resource.
+# To add a new secret: just append a block — no template changes needed.
+externalSecrets:
+  - name: aws-external-secret-postgresdb
+    secretStoreRef: secretstore-aws
+    targetSecretName: postgresdb-secret
+    refreshInterval: 600s
+    # remoteKey: remote secret name in AWS Secrets Manager
+    # keys: { localKey: remoteProperty }
+    remoteKey: postgresdb-credentials
+    keys:
+      host: host
+      maxIdleConn: maxIdleConn
+      maxOpenConn: maxOpenConn
+      name: name
+      password: password
+      port: port
+      username: username
+
+  - name: aws-external-secret-mongodb
+    secretStoreRef: secretstore-aws
+    targetSecretName: mongodb-secret
+    refreshInterval: 600s
+    remoteKey: mongodb-credentials
+    keys:
+      user: username
+      password: password
+      database: database
+      host: host
+      port: port
+
+  - name: aws-external-secret-redis
+    secretStoreRef: secretstore-aws
+    targetSecretName: redis-secret
+    refreshInterval: 600s
+    remoteKey: redis-credentials
+    keys:
+      addr: addr
+      password: password
